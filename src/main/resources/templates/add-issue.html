@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Add User</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container my-5">
+        <h2 class="mb-5">New Issue</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <form>
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label for="issueKey" class="col-form-label">Issue Key</label>
+                            <input type="text" class="form-control" id="issueKey" placeholder="Issue Key">
+                            <span class="text-danger" id="issueKeySpan"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="issueName" class="col-form-label">Issue Name</label>
+                            <input type="text" class="form-control" id="issueName" placeholder="Issue Name">
+                            <span class="text-danger" id="issueNameSpan"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mt-5">
+                            <input class="btn btn-primary" value="Add User" id="createIssue">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $( document ).ready(function() {
+
+            let url = window.location.href;
+            let projectKey = url.split('/')[4];
+            console.log("projectKey: ", projectKey);
+            $( "#createIssue" ).click(function() {
+                let issueKeyVal = $("#issueKey").val();
+                let issueNameVal = $("#issueName").val();
+                if (issueKeyVal === "") {
+                    document.getElementById("issueKeySpan").innerHTML = "Issue Key can not be empty";
+                }
+                else if (issueNameVal === "") {
+                    document.getElementById("issueNameSpan").innerHTML = "Issue Name can not be empty";
+                }
+                else {
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json",
+                        url: "/issueRest/createIssue",
+                        dataType: 'json',
+                        data: JSON.stringify({
+                            issueKey: $("#issueKey").val(),
+                            issueName: $("#issueName").val(),
+                            projectKey: projectKey
+                        }),
+                        success: function (data) {
+                            console.log("datas: ", data);
+                            if (data === "success")
+                                console.log("success")
+                            else {
+                                console.log("data: ", data);
+                            }
+                        },
+                        error: function (e) {
+                            console.log("eee: ", e)
+                            if (e.responseText === "success") {
+                                window.location.replace("http://localhost:8080/project/" + projectKey);
+                            }
+
+                        }
+                    });
+                }
+            });
+
+            $( "#back" ).click(function() {
+                window.location.replace("http://localhost:8080");
+            });
+
+
+
+        });
+    </script>
+</body>
+</html>

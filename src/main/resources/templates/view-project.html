@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Users</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+    <body>
+
+        <p th:text="'Project Name: ' + ${projectOf.name}"></p>
+        <p th:text="'Project Key: ' + ${projectOf.key}"></p>
+
+        <a class="btn btn-primary" role="button" id="back")>Back</a>
+        <a class="btn btn-success" role="button" id="createIssue")>Create Issue</a>
+
+
+        <table class="table" id="issueTable">
+            <thead>
+            <tr>
+                <th scope="col">Issue Key</th>
+                <th scope="col">Issue Name</th>
+                <th scope="col">Project</th>
+                <th scope="col">Choice</th>
+            </tr>
+            </thead>
+            <tbody th:each="issue : ${issueList}">
+            <tr>
+                <td th:text="${issue.key}"></td>
+                <td th:text="${issue.name}"></td>
+                <td th:text="${issue.projectKey}"></td>
+                <td><a th:href="@{/deleteIssue/{key}(key=${issue.key})}" class="btn btn-primary"><i class="fa-solid fa-trash"></i></a></td>
+            </tr>
+            </tbody>
+        </table>
+
+
+
+        <script>
+            $( document ).ready(function() {
+
+                let url = window.location.href;
+                let projectKey = url.split('/')[4];
+                console.log("projectKey: ", projectKey);
+
+                $( "#createIssue").click(function() {
+                    window.location.href = "/createIssue/" + projectKey;
+                });
+
+                $( "#back" ).click(function() {
+                    window.location.replace("http://localhost:8080");
+                });
+
+                $.ajax({
+                    type: "GET",
+                    contentType: "application/json",
+                    url: "/issueByProject/"+projectKey,
+                    dataType: 'json',
+                    data: projectKey,
+                    success: function (data) {
+                        console.log("data: ", data);
+                    },
+                    error: function (e) {}
+                });
+
+            });
+        </script>
+
+
+
+
+
+    </body>
+</html>
