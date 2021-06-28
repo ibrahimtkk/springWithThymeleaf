@@ -30,8 +30,6 @@ public class ProjectController {
 
     @GetMapping("/")
     public String empty(Model model) {
-        Project project = new Project("IBR", "ibrahim");
-        projectRepository.save(project);
         List<Project> projects = (List<Project>) projectRepository.findAll();
         model.addAttribute("projects", projects);
         return "index";
@@ -41,20 +39,18 @@ public class ProjectController {
     public String projectView(@PathVariable("key") String key, Model model) {
         Project project = projectRepository.findById(key).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + key));
         model.addAttribute("projectOf", project);
-        List<Issue> issueList = issueRepository.findByProjectKey(key);
+        List<Issue> issueList = issueRepository.findIssuesByProjectKey(key);
         model.addAttribute("issueList", issueList);
         return "view-project";
     }
 
     @GetMapping("/createProject")
     public String createProject(Project project) {
-        logger.info("Create Project");
-        return "add-user";
+        return "add-project";
     }
 
     @PostMapping("/addProject")
     public String addProject(@Valid Project project, BindingResult result, Model model) {
-        logger.info("Create Add");
         if (result.hasErrors()) {
             return "add-project";
         }
@@ -65,7 +61,6 @@ public class ProjectController {
 
     @GetMapping("/editProject/{key}")
     public String showProjectUpdateForm(@PathVariable("key") String key, Model model) {
-        logger.info("Create Edit");
         Project project = projectRepository.findByKey(key);
         model.addAttribute("project", project);
 
@@ -74,7 +69,6 @@ public class ProjectController {
 
     @PostMapping("/updateProject/{key}")
     public String updateProject(@PathVariable("key") String key, @Valid Project project, BindingResult result, Model model) {
-        logger.info("Create Update");
         if (result.hasErrors()) {
             project.setKey(key);
             return "update-project";

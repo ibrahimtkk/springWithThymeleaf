@@ -35,7 +35,7 @@ public class IssueController {
 
     @GetMapping("/issueByProject/{projectKey}")
     public String getIssuesByProjectKey(@PathVariable("projectKey") String projectKey, Model model) {
-        List<Issue> issueList = issueRepository.findByProjectKey(projectKey);
+        List<Issue> issueList = issueRepository.findIssuesByProjectKey(projectKey);
         model.addAttribute("issueList", issueList);
         Project project = projectRepository.findById(projectKey).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + projectKey));
         model.addAttribute("projectOf", project);

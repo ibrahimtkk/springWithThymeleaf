@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class IssueField {
-    private String issueKey;
-    private String issueName;
+public class ProjectField {
     private String projectKey;
-
-
+    private String projectName;
 }

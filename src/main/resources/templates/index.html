@@ -17,10 +17,16 @@
         <button class="btn btn-secondary dropdown-toggle" type="button" id="projectButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Projects
         </button>
-        <div th:each="projectOf : ${projects}" class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
-            <a th:text="${projectOf.name}" class="dropdown-item" th:href="@{'/project/' + ${projectOf.key} }">view</a>
-            <a class="dropdown-item" href="createProject">Create Project(Doesn't Work)</a>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <div th:each="projectOf : ${projects}">
+                <a th:text="${projectOf.name}" class="dropdown-item" th:href="@{'/project/' + ${projectOf.key} }">view</a>
+            </div>
+            <a class="dropdown-item" href="createProject">
+                <b>Create Project(Doesn't Work)</b>
+            </a>
         </div>
+
     </div>
 
 
